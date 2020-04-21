@@ -61,10 +61,12 @@ class DoublyLinkedList:
         if not self.head and not self.tail:
             self.head = new_node
             self.tail = new_node
+            
         else:
             new_node.next = self.head
             self.head.prev = new_node
             self.head = new_node
+            
 
     """Removes the List's current head node, making the
     current head's next node the new head of the List.
@@ -126,7 +128,7 @@ class DoublyLinkedList:
         self.length -= 1
         # This is the only node
         if self.head is self.tail:
-            self.head = None
+            self.head = Non
             self.tail = None
         # It's the head
         elif node is self.head:
