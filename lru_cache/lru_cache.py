@@ -1,4 +1,7 @@
+import sys
+sys.path.append("../doubly_linked_list")
 from doubly_linked_list import DoublyLinkedList
+
 class LRUCache:
     """
     Our LRUCache class keeps track of the max number of nodes it
@@ -9,7 +12,7 @@ class LRUCache:
     """
     def __init__(self, limit=10):
         self.max = limit
-        self.curr_number = 0
+        self.size = 0
         self.list = DoublyLinkedList()
         self.storage = {}
 
@@ -21,18 +24,12 @@ class LRUCache:
     key-value pair doesn't exist in the cache.
     """
     def get(self, key):
-        if key not in self.storage:
+        if key in self.storage:
+            node = self.storage[key]
+            self.list.move_to_end(node)
+            return node.value[1]
+        else:
             return None
-        temp = []
-        for i in range(1,self.curr_number):
-            item = self.list.remove_from_head()
-            if item != self.storage[key]:
-                temp.insert(0,item)
-            else:
-                break
-        for i in temp:
-            self.list.add_to_head(temp)
-        return self.storage[key]
 
     """
     Adds the given key-value pair to the cache. The newly-
@@ -46,24 +43,19 @@ class LRUCache:
     the newly-specified value.
     """
     def set(self, key, value):
-       if self.curr_number == self.max:
-           ret = self.list.remove_from_tail()
-           for key, i in self.storage.items():
-               print("removed",ret)
-               if self.storage[key] == ret:
-                   
-                   del self.storage[key]
+       
+        if key in self.storage:
+           node = self.storage[key]
+           node.value = (key, value)
 
-           self.list.add_to_head(value)
-           self.storage[key] = value
-       elif key in self.storage.items():
-           print(key)
-           self.storage[key] = value
+           self.list.move_to_end(node)
+           return
+        if self.size == self.max:
+            oldest_key = self.list.head.value[0]
+            del self.storage[oldest_key]
+            self.list.remove_from_head()
+            self.size -= 1
+        self.list.add_to_tail((key,value))
+        self.storage[key] = self.list.tail
+        self.size += 1
 
-       else:
-           self.list.add_to_head(value)
-           self.curr_number += 1
-           self.storage[key] = value
-       # at max
-       # same Key Value
-       # else add

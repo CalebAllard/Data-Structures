@@ -128,7 +128,7 @@ class DoublyLinkedList:
         self.length -= 1
         # This is the only node
         if self.head is self.tail:
-            self.head = Non
+            self.head = None
             self.tail = None
         # It's the head
         elif node is self.head:
